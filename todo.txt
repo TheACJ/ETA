@@ -1,0 +1,3 @@
+Make Superuser able to see individual scores
+Add progress bar on top of question
+Make list item row clickable

@@ -1,0 +1,38 @@
+{% load static %}
+<div class="ACJ-footer" style="color:#222; margin-top: 80px; font-size: 35px; text-align: center; font-weight: 900; padding: 0 20px; width: 100%; font-family: 'Clicker Script', cursive;">
+  
+<p id="today">{% now "H:i:s"  %}</p>
+
+
+
+  <script>
+    function updateTime() {
+      var currentTime = new Date();
+      var hours = currentTime.getHours();
+      var minutes = currentTime.getMinutes();
+      var seconds = currentTime.getSeconds();
+
+      // Convert to 12-hour format
+      var amPm = hours >= 12 ? "pm" : "am";
+      hours = hours % 12 || 12;
+
+      // Add leading zeros if necessary
+      hours = (hours < 10 ? "0" : "") + hours;
+      minutes = (minutes < 10 ? "0" : "") + minutes;
+      seconds = (seconds < 10 ? "0" : "") + seconds;
+
+      var formattedTime = hours + ":" + minutes + ":" + seconds + " " + amPm;
+      document.getElementById("today").textContent = formattedTime;
+    }
+
+    setInterval(updateTime, 1000); // Update every 1 second (1000 milliseconds)
+  </script>
+  
+</body>
+</html>
+
+
+   <p><small>&copy; 
+Copyright <script>document.write(new Date().getFullYear());</script> All rights reserved. Made with 	&#9829; <a href="https://TheACJ.github.io" class="nom">by The ACJ</a>
+   </p>
+</div>

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h3> Add questions from bank </h3>
+  <p>Select the questions you want to add. Note that already added questions will not be present</p>
+
+
+<div>
+  {% if questions %}
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered mg-b-0">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="checkall"> </th>
+            <th>Class </th>
+            <th>Question</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in questions %}
+          <tr>
+            <td> <input type="checkbox" name="question[]" value="{{item.id}}"> </td>
+            <td>{{item.class_group}} </td>
+            <td>{{item.question|safe}} </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+      <button type="submit" class="submit-btn btn btn-primary">Add questions</button>
+  </form>
+  {% else %}
+  <p>No question to show.</p>
+  {% endif %}
+</div>
+
+
+{% endblock content %}
+
+
+
+{% block scripts %}
+  <script>
+    $("#checkall").change(function () {
+        if (this.checked) {
+          $("input[type=checkbox]").attr("checked", true)
+        } else {
+          $("input[type=checkbox]").attr("checked", false)
+        }
+      });
+  </script>
+{% endblock scripts %}

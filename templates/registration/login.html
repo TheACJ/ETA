@@ -1,0 +1,97 @@
+{% extends 'login1.html' %}
+{% load static %}
+
+{%block body-style%} background-color: #666666; {%endblock%}
+
+{% block styles %}
+.imglogo {
+      width: 210px;
+      height: 210px; 
+      margin: auto;
+}
+
+@media (max-width: 768px) {
+     .imglogo {
+          width: 60px;
+          height: 60px; 
+     }
+     .login100-form-title {
+          margin-top: 40px;
+     }
+     .container-login100-form-btn {
+          padding: 10px;
+     }
+}
+{% endblock styles %}
+
+{% block content %}
+  {% comment %}<!-- <div class="row text-dark">
+        <div class="card col-md-6 offset-md-3 mt-4 my-auto p-4">
+        <h1 class="card-title">{{sitename}}</h1>
+        <form method="POST" class="mt-4 mb-3" action="">
+          <div class="my-2">
+            {{form.errors}}
+          </div>
+
+          {% csrf_token %}
+          <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+            <input type="username" class="form-control" id="username" name="username">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password">
+          </div>
+          <button type="submit" class="mt-2 btn btn-danger">Submit</button>
+        </form>
+      </div>
+  </div> -->{% endcomment %}
+ 
+<div class="container-login100">
+<img src="{% static 'logo.png' %}" class="imglogo">
+  <div class="wrap-login100">
+        
+    <form method="POST" class="m-l-r-auto  validate-form" action="">
+      <span class="login100-form-title p-b-43"> ACJ - EPT
+			</span>
+      <div class="my-2">
+            {{form.errors}}
+      </div>
+
+      {% csrf_token %}
+      <div class="wrap-input100 validate-input">
+        <input type="username" class="input100" id="username" name="username">
+           <span class="focus-input100"></span>
+				   <span class="label-input100">Username</span>
+        </div>
+        <div class="wrap-input100 validate-input">
+           <input type="password" class="input100" name="password">
+           <span class="focus-input100"></span>
+					 <span class="label-input100">Password</span>
+        </div>
+          
+          <div class="flex-sb-m w-full p-t-3 p-b-32">
+						<div class="contact100-form-checkbox">
+							<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+							<label class="label-checkbox100" for="ckb1">
+								Remember me
+							</label>
+						</div>
+
+						<div>
+					
+							<!--	<button class="txt1" style="border: none;">Forgot Password?</button> -->
+							
+						</div>
+					</div>
+					<div class="container-login100-form-btn">
+          <button type="submit" class="login100-form-btn" onclick="alert( 'Welcome to ACJ E-Test!!')" >Login</button></div>
+          
+				</form>
+
+      <!--  <div class="login100-more" >
+				</div> -->
+
+      </div>
+  </div>
+    {% endblock content %}

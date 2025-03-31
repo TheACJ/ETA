@@ -1,0 +1,37 @@
+WARNING 2023-10-04 08:17:36,858 140186200127360 Not Found: /favicon.ico
+ERROR 2023-10-04 08:26:17,531 140186200127360 Internal Server Error: /students/113/update/
+Traceback (most recent call last):
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/views/generic/edit.py", line 125, in get_success_url
+    url = self.object.get_absolute_url()
+AttributeError: 'User' object has no attribute 'get_absolute_url'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/views/generic/base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/views/generic/edit.py", line 208, in post
+    return super().post(request, *args, **kwargs)
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+  File "/home/ETA/CBT/apps/core/views.py", line 109, in form_valid
+    super().form_valid(form)
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/contrib/messages/views.py", line 12, in form_valid
+    response = super().form_valid(form)
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/views/generic/edit.py", line 136, in form_valid
+    return super().form_valid(form)
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/views/generic/edit.py", line 65, in form_valid
+    return HttpResponseRedirect(self.get_success_url())
+  File "/home/ETA/cbt/lib/python3.10/site-packages/django/views/generic/edit.py", line 127, in get_success_url
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: No URL to redirect to.  Either provide a url or define a get_absolute_url method on the Model.
