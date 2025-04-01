@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#c2d4d8] min-h-screen;
+  }
+}
+
+@layer components {
+  .navbar {
+    @apply bg-secondary text-white;
+  }
+  
+  .main-content {
+    @apply bg-white font-kalam m-[50px] p-2.5 shadow-custom border border-[#6675df];
+  }
+  
+  .nav-link {
+    @apply text-white hover:text-gray-200 px-3 py-2;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white px-4 py-2 rounded hover:bg-blue-700;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-white px-4 py-2 rounded hover:bg-gray-600;
+  }
+  
+  .form-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary;
+  }
+  
+  .alert {
+    @apply p-4 mb-4 rounded;
+  }
+  
+  .alert-success {
+    @apply bg-green-100 text-green-700 border border-green-400;
+  }
+  
+  .alert-error {
+    @apply bg-red-100 text-red-700 border border-red-400;
+  }
+}
