@@ -1,23 +1,31 @@
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import logo from '../assets/logo.png';
 
 interface LoginFormData {
-  username: string;
+  email: string;
   password: string;
 }
 
 export default function Login(): JSX.Element {
   const [formData, setFormData] = useState<LoginFormData>({
-    username: '',
+    email: '',
     password: '',
   });
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: Implement login logic
-    navigate('/');
+    setError(null);
+    const success = await login({ email: formData.email, password: formData.password });
+    if (success) {
+      navigate('/');
+    } else {
+      setError('Invalid email or password');
+    }
   };
 
   return (
@@ -30,15 +38,15 @@ export default function Login(): JSX.Element {
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-              Username
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
             </label>
             <input
-              type="text"
-              id="username"
+              type="email"
+              id="email"
               className="form-input mt-1"
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
             />
           </div>
@@ -57,6 +65,8 @@ export default function Login(): JSX.Element {
             />
           </div>
           
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          
           <button type="submit" className="btn-primary w-full">
             Login
           </button>
@@ -64,4 +74,4 @@ export default function Login(): JSX.Element {
       </div>
     </div>
   );
-} 
+}

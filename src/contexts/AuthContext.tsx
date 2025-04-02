@@ -1,6 +1,13 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { authAPI } from '../services/api';
-import { User, LoginCredentials } from '../types';
+import { api } from '../lib/api'; // Adjust path as per your project structure
+import { Database } from '../lib/database.types';
+
+type User = Database['public']['Tables']['users']['Row'];
+
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -25,8 +32,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const checkAuth = async () => {
     try {
-      const response = await authAPI.getCurrentUser();
-      setUser(response.data);
+      // Assuming api.auth.getCurrentUser() is added to api.ts
+      const { data: { user: authUser }, error } = await api.auth.getCurrentUser();
+      if (error) throw error;
+      if (authUser) {
+        const { data: userProfile, error: profileError } = await api.users.getProfile(authUser.id);
+        if (profileError) throw profileError;
+        setUser(userProfile);
+      } else {
+        setUser(null);
+      }
     } catch (error) {
       console.error('Auth check failed:', error);
       setUser(null);
@@ -37,11 +52,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = async (credentials: LoginCredentials) => {
     try {
-      const response = await authAPI.login(credentials);
-      const { token, user } = response.data;
-      localStorage.setItem('token', token);
-      setUser(user);
-      return true;
+      const { data, error } = await api.auth.signIn(credentials.email, credentials.password);
+      if (error) throw error;
+      const authUser = data.user;
+      if (authUser) {
+        const { data: userProfile, error: profileError } = await api.users.getProfile(authUser.id);
+        if (profileError) throw profileError;
+        setUser(userProfile);
+        return true;
+      }
+      return false;
     } catch (error) {
       console.error('Login failed:', error);
       return false;
@@ -50,8 +70,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = async () => {
     try {
-      await authAPI.logout();
-      localStorage.removeItem('token');
+      const { error } = await api.auth.signOut();
+      if (error) throw error;
       setUser(null);
       return true;
     } catch (error) {
@@ -73,4 +93,4 @@ export function useAuth(): AuthContextType {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-} 
+}

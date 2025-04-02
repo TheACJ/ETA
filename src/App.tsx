@@ -1,138 +1,87 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import QuestionBank from './pages/QuestionBank';
-import Students from './pages/Students';
-import Staff from './pages/Staff';
-import TermSession from './pages/TermSession';
 import Login from './pages/Login';
 import ExamList from './pages/exam/ExamList';
-import ExamCreate from './pages/exam/ExamCreate';
+import ExamCreate from './components/ExamCreate';
 import ExamDetail from './pages/exam/ExamDetail';
-import StaffManagement from './pages/admin/StaffManagement';
-import StudentManagement from './pages/admin/StudentManagement';
+// import QuestionBank from './pages/QuestionBank';
+// import StudentManagement from './pages/admin/StudentManagement';
+// import ExamManagement from './pages/ExamManagement';
+// import NotFound from './pages/NotFound';
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
-
-function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user) {
-    return <Navigate to="/login" />;
-  }
-
-  return <Layout>{children}</Layout>;
-}
-
-function AppRoutes() {
-  return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/login" element={<Login />} />
-
-      {/* Protected Routes */}
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/questionbank"
-        element={
-          <ProtectedRoute>
-            <QuestionBank />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/students"
-        element={
-          <ProtectedRoute>
-            <Students />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff"
-        element={
-          <ProtectedRoute>
-            <Staff />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/term-session"
-        element={
-          <ProtectedRoute>
-            <TermSession />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/exams"
-        element={
-          <ProtectedRoute>
-            <ExamList />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/exams/create"
-        element={
-          <ProtectedRoute>
-            <ExamCreate />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/exams/:id"
-        element={
-          <ProtectedRoute>
-            <ExamDetail />
-          </ProtectedRoute>
-        }
-      />
-      
-      {/* Admin Routes */}
-      <Route
-        path="/admin/staff"
-        element={
-          <ProtectedRoute>
-            <StaffManagement />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/students"
-        element={
-          <ProtectedRoute>
-            <StudentManagement />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-  );
-}
+// Placeholder imports (uncomment when implemented)
+// import StaffManagement from './pages/admin/StaffManagement';
+// import TermSession from './pages/admin/TermSession';
 
 function App() {
   return (
-    <Router>
+    <ErrorBoundary fallback={<div>Something went wrong. Please refresh or contact support.</div>}>
       <AuthProvider>
-        <AppRoutes />
+        <Router>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<Login />} />
+
+            {/* General Protected Routes */}
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Dashboard />} />
+            </Route>
+
+            {/* Exam-Related Routes */}
+            <Route path="/exams" element={<Layout />}>
+              <Route index element={<ExamList />} /> {/* /exams */}
+              <Route path=":id" element={<ExamDetail />} /> {/* /exams/:id */}
+              <Route path="create" element={<ExamCreate />} /> {/* /exams/create */}
+            </Route>
+
+            {/* Staff Routes */}
+            {/* <Route
+              path="/exam-management"
+              element={
+                <ProtectedRoute requiredRole="staff">
+                  <Layout>
+                    <ExamManagement />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            /> */}
+            {/* <Route
+              path="/question-bank"
+              element={
+                <ProtectedRoute requiredRole="staff">
+                  <Layout>
+                    <QuestionBank />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            /> */}
+
+            {/* Admin Routes */}
+            {/* <Route
+              path="/admin/*"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <Layout />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="students" element={<StudentManagement />} />
+              {/* Uncomment when implemented */}
+              {/* <Route path="staff" element={<StaffManagement />} /> */}
+              {/* <Route path="term-session" element={<TermSession />} /> */}
+            {/* </Route> */}
+
+            {/* Catch-All Route */}
+            {/* <Route path="*" element={<NotFound />} /> */}
+          </Routes>
+        </Router>
       </AuthProvider>
-    </Router>
+    </ErrorBoundary>
   );
 }
 
-export default App; 
+export default App;
