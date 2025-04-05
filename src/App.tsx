@@ -3,13 +3,13 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
+import { Dashboard }from './pages/Dashboard';
 import Login from './pages/Login';
 import ExamList from './pages/exam/ExamList';
 import ExamCreate from './components/ExamCreate';
 import ExamDetail from './pages/exam/ExamDetail';
 // import QuestionBank from './pages/QuestionBank';
-// import StudentManagement from './pages/admin/StudentManagement';
+import StudentManagement from './components/student/StudentManagement';
 // import ExamManagement from './pages/ExamManagement';
 // import NotFound from './pages/NotFound';
 
@@ -25,6 +25,7 @@ function App() {
           <Routes>
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
+            <Route path="/students" element={<StudentManagement />} />
 
             {/* General Protected Routes */}
             <Route path="/" element={<Layout />}>

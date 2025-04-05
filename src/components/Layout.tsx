@@ -24,7 +24,7 @@ const navLinks: NavLink[] = [
 ];
 
 const adminLinks: AdminLink[] = [
-  { href: '/admin/students', label: 'Students' },
+  { href: '/students', label: 'Students' },
   { href: '/admin/staff', label: 'Staff' },
   { href: '/admin/term-session', label: 'Term/Session' },
 ];
@@ -243,7 +243,7 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
       <footer className="bg-gray-800 text-gray-300 py-4 mt-8">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
           <p>© {new Date().getFullYear()} The ACJ - ETA. All rights reserved.</p>
-          <p className="mt-1">Onitsha, Delta State, Nigeria</p>
+          <p className="mt-1">Nigeria</p>
         </div>
       </footer>
     </div>
