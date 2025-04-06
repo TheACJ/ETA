@@ -5,11 +5,10 @@ import { cn } from '../../lib/utils';
 
 // Example integration with Heroicons v2
 import {
-  ArrowPathIcon,
-  CheckCircleIcon,
-  XCircleIcon,
-  ClockIcon,
-  // ... other icons
+  ArrowPathIcon,        // For "loader" (and "spinner")
+  CheckCircleIcon,      // For "check-circle" (and "check")
+  XCircleIcon,          // For "x-circle" (and "cross")
+  ClockIcon,            // For "clock"
 } from '@heroicons/react/24/outline';
 import { IconType } from 'react-icons'; // Optional for React Icons
 
@@ -39,7 +38,7 @@ const iconVariants = cva('flex-shrink-0', {
 interface IconProps
   extends React.SVGAttributes<SVGSVGElement>,
     VariantProps<typeof iconVariants> {
-  name: keyof typeof iconMap;
+  name: keyof typeof iconMap | 'loader' | 'check-circle' | 'x-circle' | 'clock'; // Extend for ExamDetails
   icon?: IconType | React.ComponentType<{ className?: string }>;
   title?: string;
   description?: string;
@@ -50,7 +49,10 @@ const iconMap = {
   check: CheckCircleIcon,
   cross: XCircleIcon,
   clock: ClockIcon,
-  // ... map other icon names to components
+  // Extended for ExamDetails compatibility
+  loader: ArrowPathIcon,
+  'check-circle': CheckCircleIcon,
+  'x-circle': XCircleIcon,
 };
 
 const Icon = React.forwardRef<SVGSVGElement, IconProps>(
@@ -80,7 +82,7 @@ const Icon = React.forwardRef<SVGSVGElement, IconProps>(
           <IconComponent
             className={cn(
               iconVariants({ size, variant, className }),
-              name === 'spinner' && 'animate-spin'
+              (name === 'spinner' || name === 'loader') && 'animate-spin' // Support both names
             )}
             aria-hidden={!title}
             role={title ? 'img' : undefined}
@@ -92,7 +94,7 @@ const Icon = React.forwardRef<SVGSVGElement, IconProps>(
           <IconComponent
             className={cn(
               iconVariants({ size, variant, className }),
-              name === 'spinner' && 'animate-spin'
+              (name === 'spinner' || name === 'loader') && 'animate-spin'
             )}
             aria-hidden={!title}
             role={title ? 'img' : undefined}
@@ -108,6 +110,7 @@ const Icon = React.forwardRef<SVGSVGElement, IconProps>(
     );
   }
 );
+
 Icon.displayName = 'Icon';
 
 export { Icon, iconVariants };

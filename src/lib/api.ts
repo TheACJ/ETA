@@ -391,41 +391,64 @@ export const api = {
   },
 
   studentExams: {
-    async start(examId: string, studentId: string) {
-      // Check if a record already exists
+    async start(examId: string, studentId: string, sessionToken?: string) {
       const { data: existing, error: fetchError } = await supabase
         .from('student_exams')
         .select('*')
         .eq('exam_id', examId)
         .eq('student_id', studentId)
-        .eq('status', 'in_progress') // Only fetch in-progress exams
         .single();
-
-      if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116: no rows found
+    
+      if (fetchError && fetchError.code !== 'PGRST116') {
         return { data: null, error: fetchError };
       }
-
-      if (existing) {
+    
+      if (existing && existing.status === 'in_progress') {
         return { data: existing, error: null };
       }
-
-      // Create new record if none exists
+    
       const { data, error } = await supabase
         .from('student_exams')
-        .insert({ exam_id: examId, student_id: studentId, status: 'in_progress' })
+        .upsert({
+          exam_id: examId,
+          student_id: studentId,
+          status: 'in_progress',
+          started_at: new Date().toISOString(),
+          session_token: sessionToken,
+        }, { onConflict: 'student_id,exam_id' })
         .select()
         .single();
-
-      return { data, error };
+      if (error) throw error;
+      return { data };
+    
+      // return { data, error };
     },
+
     async submit(id: string) {
+      const { data: examData, error: fetchError } = await supabase
+        .from('student_exams')
+        .select('started_at, exam:exams(duration)')
+        .eq('id', id)
+        .single();
+    
+      if (fetchError) throw fetchError;
+    
+      const startedAt = new Date(examData.started_at).getTime();
+      const durationMs = examData.exam[0].duration * 60 * 1000;
+      const now = Date.now();
+    
+      if (now > startedAt + durationMs) {
+        throw new Error('Exam duration has expired.');
+      }
+    
       const { data, error } = await supabase
         .from('student_exams')
         .update({ status: 'submitted', submitted_at: new Date().toISOString() })
         .eq('id', id)
         .select()
         .single();
-      return { data, error };
+      if (error) throw error;
+      return { data };
     },
     /**
      * Fetches a student's exam records with exam details.
